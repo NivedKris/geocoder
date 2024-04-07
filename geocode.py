@@ -1,9 +1,13 @@
 # geocoder.py
 import os
 import requests
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
 
 google_maps_api_key= os.getenv('GOOGLE_MAPS_API_KEY')
-
 def geocode_address(address):
     url = f'https://maps.googleapis.com/maps/api/geocode/json?address={address}&key={google_maps_api_key}'
     response = requests.get(url)
