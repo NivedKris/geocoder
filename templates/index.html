@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Address Extractor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* CSS styles */
+        .file-input-container {
+            text-align: center;
+        }
+
+        .file-input {
+            display: inline-block;
+            margin-bottom: 10px;
+            /* Add some spacing between file inputs */
+        }
+
+        .fileInput {
+            border: 1px dotted #000;
+            /* Change border style to dotted */
+            padding: 10px;
+            /* Add some padding for better appearance */
+        }
+
+        .geocoded-locations {
+            margin-top: 20px;
+        }
+
+        .download-button {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .download-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Delivery Application</h1>
+        <p style="font-family: 'Montserrat', sans-serif; font-size: 16px; color: #333; line-height: 1.5; text-align: center;">
+            Please utilize this platform to provide the billing information for seamless facilitation of our delivery
+            operations.
+        </p>
+
+
+        <form id="uploadForm" method="POST" enctype="multipart/form-data">
+            <!-- File input field -->
+            <div class="file-input-container">
+                <div id="fileInputs">
+                    <input type="file" name="files[]" class="fileInput" accept=".pdf">
+                </div>
+            </div>
+            <button type="button" onclick="addFileInput()">Add File</button>
+            <button type="submit">Submit</button>
+        </form>
+        <!-- Display geocoded locations -->
+        {% if geocoded_locations %}
+        <hr>
+        <div class="geocoded-locations">
+            <h2>Geocoded Locations:</h2>
+            <ul>
+                {% for location in geocoded_locations %}
+                <li>
+                    <strong>Address:</strong> {{ location[0] }}<br>
+                    <strong>Latitude:</strong> {{ location[1] }}<br>
+                    <strong>Longitude:</strong> {{ location[2] }}<br>
+                </li>
+                {% endfor %}
+            </ul>
+            <!-- Download button for CSV file -->
+            <a href="{{ url_for('download_csv', csv_data=csv_data) }}" class="download-button" id="download-csv-link">Download
+                CSV</a>
+
+
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function addFileInput() {
+            const fileInputs = document.getElementById('fileInputs');
+            const newInput = document.createElement('input');
+            newInput.type = 'file';
+            newInput.name = 'files[]';
+            newInput.className = 'fileInput';
+            newInput.accept = '.pdf';
+            fileInputs.appendChild(newInput);
+        }
+        
+                document.getElementById('download-csv-link').addEventListener('click', function(event) {
+                    // Prevent the default behavior of the link
+                    event.preventDefault();
+
+                // Perform the download by clicking the link programmatically
+                var downloadLink = document.createElement('a');
+                downloadLink.href = this.getAttribute('href');
+                downloadLink.download = 'geocoded_addresses.csv';
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+
+                // Redirect to the specified website after a short delay
+                setTimeout(function() {
+                    window.location.href = 'http://route-optimized-logistics-nived-krishna.vercel.app';
+        }, 2000); // Adjust the delay as needed
+    });
+        
+
+    </script>
+</body>
+
+</html>
