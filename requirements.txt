@@ -1,6 +1,3 @@
 requests
 flask
-tempFile
 PyPDF2
-csv
-os
